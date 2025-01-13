@@ -1,15 +1,23 @@
 package com.example.mentoriasapp.activity
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.mentoriasapp.R
+import com.example.mentoriasapp.databinding.ActivityIntroBinding
 
-class IntroActivity : AppCompatActivity() {
+class IntroActivity : BaseActivity() {
+    private lateinit var binding: ActivityIntroBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
+        binding = ActivityIntroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.startButton.setOnClickListener {
+            startActivity(Intent(this@IntroActivity, LoginActivity::class.java))
+        }
+
+        binding.textView4.setOnClickListener {
+            startActivity(Intent(this@IntroActivity, RegisterActivity::class.java))
+        }
     }
 }

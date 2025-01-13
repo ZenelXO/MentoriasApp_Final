@@ -41,14 +41,15 @@
                 android:textSize="15sp"/>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button"
+                android:id="@+id/start_button"
                 style="@android:style/Widget.Button"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:layout_margin="32dp"
                 android:background="@color/brown"
                 android:text="Iniciar Sesión"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="20sp"/>
 
             <TextView
                 android:id="@+id/textView4"
