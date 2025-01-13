@@ -52,7 +52,7 @@
                 android:layout_marginTop="62dp"
                 android:layout_marginRight="32dp"
                 android:ems="10"
-                android:hint="Contraseña: "
+                android:hint="Escriba su contraseña: "
                 android:inputType="textPassword" />
             <EditText
                 android:id="@+id/editTextTextPassword2"
@@ -62,7 +62,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="32dp"
                 android:ems="10"
-                android:hint="Contraseña: "
+                android:hint="Repita su contraseña: "
                 android:inputType="textPassword" />
 
             <Button
