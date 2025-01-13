@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "827035003874",
+    "project_id": "mentoriasapp",
+    "storage_bucket": "mentoriasapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827035003874:android:27e3c532a35bae696de7bb",
+        "android_client_info": {
+          "package_name": "com.example.mentoriasapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB7oJ1Z0zZi3cS7B9mBtg2qrzoefpuBy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
