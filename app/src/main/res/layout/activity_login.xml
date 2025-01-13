@@ -18,17 +18,19 @@
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"
-                android:layout_height="202dp"
-                android:layout_marginTop="12dp"
-                app:srcCompat="@drawable/logo_ulpgc" />
+                android:layout_height="match_parent"
+                android:layout_margin="32dp"
+                android:layout_marginTop="1dp"
+                app:srcCompat="@drawable/logo_ulpgc2" />
 
             <EditText
                 android:id="@+id/editTextTextEmailAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
-                android:layout_marginTop="142dp"
+                android:layout_marginTop="162dp"
                 android:layout_marginRight="32dp"
+                android:backgroundTint="#FFC107"
                 android:ems="10"
                 android:hint="Usuario: "
                 android:inputType="textEmailAddress" />
@@ -40,28 +42,32 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="62dp"
                 android:layout_marginRight="32dp"
+                android:backgroundTint="#FFC107"
                 android:ems="10"
                 android:hint="Contraseña: "
                 android:inputType="textPassword" />
 
             <Button
+                android:background="@color/yellow"
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_height="61dp"
                 android:layout_marginLeft="62dp"
                 android:layout_marginTop="92dp"
                 android:layout_marginRight="62dp"
-                android:text="Entrar" />
+                android:text="Entrar"
+                android:textColor="@color/background_blue"/>
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
-                android:layout_marginTop="162dp"
+                android:layout_marginTop="92dp"
                 android:layout_marginRight="32dp"
                 android:text="Todos los derechos reservados por ULPGC"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
     </ScrollView>
