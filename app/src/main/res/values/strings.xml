@@ -3,4 +3,14 @@
     <string name="intro_title">Bienvenido a tu aplicación de <font color="#FFD54F">Mentorías</font></string>
     <string name="intro_text">Busca a los mejores mentores de todo tipo,\n para que te ayuden en tu camino\n en la universidad.</string>
     <string name="intro_register">¿Todavía no tienes cuenta? <font color="#FFD54F">Regístrate</font></string>
+    <string name="welcome">Bienvenido de nuevo!</string>
+    <string name="welcome_name">Itamar</string>
+
+    <string name="mentor1">Manuel</string>
+    <string name="mentor2">Antonio</string>
+    <string name="mentor3">Óscar</string>
+
+    <string name="mentorSubject1">Matemáticas</string>
+    <string name="mentorSubject2">Lengua</string>
+    <string name="mentorSubject3">Física</string>
 </resources>
