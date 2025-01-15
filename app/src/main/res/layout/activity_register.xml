@@ -32,7 +32,7 @@
                 android:layout_marginRight="32dp"
                 android:backgroundTint="#FFC107"
                 android:ems="10"
-                android:hint="Escriba su usuario: "
+                android:hint="Escriba su email: "
                 android:inputType="textEmailAddress"
                 android:textColor="#090909"
                 android:textColorHint="#FFFFFF" />
@@ -46,7 +46,7 @@
                 android:layout_marginRight="32dp"
                 android:backgroundTint="#FFC107"
                 android:ems="10"
-                android:hint="Repita el usuario: "
+                android:hint="Repita el email: "
                 android:inputType="textEmailAddress"
                 android:textColorHint="#FFFFFF"
                 android:textColorLink="#FFFFFF" />
