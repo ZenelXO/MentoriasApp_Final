@@ -2,6 +2,7 @@ package com.example.mentoriasapp.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -9,6 +10,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mentoriasapp.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseException
+import com.google.firebase.database.FirebaseDatabase
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,14 +19,21 @@ class RegisterActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
 
+        val editTextName: EditText = findViewById(R.id.editTextNameContainer)
+        val editTextBiography: EditText = findViewById(R.id.editTextBiography)
         val editTextEmail: EditText = findViewById(R.id.editTextTextEmailAddress)
         val editTextEmail2: EditText = findViewById(R.id.editTextTextEmailAddress2)
         val editTextPassword: EditText = findViewById(R.id.editTextTextPassword)
         val editTextPassword2: EditText = findViewById(R.id.editTextTextPassword2)
         val loginButton: Button = findViewById(R.id.login_button)
         val auth:FirebaseAuth = FirebaseAuth.getInstance()
+        val dataBaseRealTime:FirebaseDatabase = FirebaseDatabase.getInstance("https://mentoriasapp-default-rtdb.europe-west1.firebasedatabase.app/")
+        val dataBaseReference = dataBaseRealTime.reference
 
         loginButton.setOnClickListener {
+            val nameStudent = editTextName.text.toString()
+            val biographyStudent = editTextBiography.text.toString()
+
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
 
@@ -51,6 +61,20 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             //Aqui es donde creamos la cuenta en FIREBASE-----------------------------------------
+            val userId = dataBaseReference.push().key
+            val userInfo = mapOf(
+                "email" to email,
+                "name" to nameStudent,
+                "biografia" to biographyStudent,
+                "picUrl" to "",
+                "reservas" to listOf<Map<String, Any>>()
+            )
+            try {
+                dataBaseReference.child("alumnos").child(userId!!).setValue(userInfo)
+            } catch (e: DatabaseException) {
+                Log.e("FirebaseError", "Error writing to database: ${e.message}")
+            }
+
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {

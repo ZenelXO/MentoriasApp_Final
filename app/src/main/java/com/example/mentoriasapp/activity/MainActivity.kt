@@ -1,8 +1,10 @@
 package com.example.mentoriasapp.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +33,13 @@ class MainActivity : BaseActivity() {
         val user = FirebaseAuth.getInstance().currentUser?.email
         val textView: TextView = findViewById(R.id.textView5)
         textView.text = user.toString()
+
+        //Boton para acceder al perfil
+        val profileButton: LinearLayout = findViewById(R.id.profile_button)
+        profileButton.setOnClickListener{
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
 
         initSubject()
         initMentor()

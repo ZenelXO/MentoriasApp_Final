@@ -44,15 +44,20 @@ class MentorDetailsActivity : BaseActivity() {
             startActivity(intent)
         }
 
-        //Imagen de mentor
+        //Caracteristicas del mentor
+        val mentor_name: TextView = findViewById(R.id.mentor_name_detail)
+        mentor_name.text = item.name
+
+        val mentor_description : TextView = findViewById(R.id.mentor_description)
+        mentor_description.text = item.description
+        
+        val mentor_rating: TextView = findViewById(R.id.mentor_rating_detail)
+        mentor_rating.text = item.rating.toString()
+
         val mentor_image : ImageView = findViewById(R.id.mentor_pic_container)
         Glide.with(this)
             .load(item.picUrl)
             .into(mentor_image)
-
-        //Descripción del mentor
-        val mentor_description : TextView = findViewById(R.id.mentor_description)
-        mentor_description.text = item.description
 
         // Inicializar la lista de materias
         initSubjectsList()

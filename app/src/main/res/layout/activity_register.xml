@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -19,16 +20,44 @@
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"
                 android:layout_height="202dp"
-                android:layout_marginTop="1dp"
                 android:layout_margin="32dp"
+                android:layout_marginTop="1dp"
                 app:srcCompat="@drawable/logo_ulpgc2" />
+
+            <EditText
+                android:id="@+id/editTextNameContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginRight="32dp"
+                android:backgroundTint="#FFC107"
+                android:ems="10"
+                android:hint="Escriba su nombre: "
+                android:inputType="textEmailAddress"
+                android:textColor="#090909"
+                android:textColorHint="#FFFFFF" />
+
+            <EditText
+                android:id="@+id/editTextBiography"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginRight="32dp"
+                android:backgroundTint="#FFC107"
+                android:ems="10"
+                android:hint="Escriba su biografía: "
+                android:inputType="textEmailAddress"
+                android:textColor="#090909"
+                android:textColorHint="#FFFFFF" />
 
             <EditText
                 android:id="@+id/editTextTextEmailAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="62dp"
                 android:layout_marginRight="32dp"
                 android:backgroundTint="#FFC107"
                 android:ems="10"
@@ -84,9 +113,9 @@
                 android:layout_marginLeft="62dp"
                 android:layout_marginTop="92dp"
                 android:layout_marginRight="62dp"
-                android:text="Registrar"
                 android:background="@color/yellow"
-                android:textColor="@color/background_blue"/>
+                android:text="Registrar"
+                android:textColor="@color/background_blue" />
 
             <TextView
                 android:id="@+id/textView9"

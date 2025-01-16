@@ -31,6 +31,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/back_arrow" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/logo_ulpgc" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
@@ -38,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="290dp"
                 tools:srcCompat="@tools:sample/avatars"
-                android:background="@drawable/grey_background"
+                android:background="@drawable/blue_bg"
                 android:layout_margin="16dp"
                 android:padding="16dp"/>
 
@@ -106,14 +115,15 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:paddingStart="8dp"
-                android:paddingEnd="8dp"/>
+                android:paddingEnd="8dp" />
 
             <TextView
                 android:id="@+id/mentor_description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="La descripcion del mentor."
-                android:layout_margin="16dp"/>
+                android:layout_height="177dp"
+                android:layout_margin="16dp"
+                android:minHeight="177dp"
+                android:text="La descripcion del mentor." />
 
             <LinearLayout
                 android:layout_width="match_parent"
