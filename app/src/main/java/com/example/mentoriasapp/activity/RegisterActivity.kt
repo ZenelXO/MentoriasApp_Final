@@ -31,8 +31,8 @@ class RegisterActivity : AppCompatActivity() {
         val dataBaseReference = dataBaseRealTime.reference
 
         loginButton.setOnClickListener {
-            val nameStudent = editTextName.text.toString()
-            val biographyStudent = editTextBiography.text.toString()
+            var nameStudent = editTextName.text.toString()
+            var biographyStudent = editTextBiography.text.toString()
 
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
@@ -41,6 +41,14 @@ class RegisterActivity : AppCompatActivity() {
             val password2 = editTextPassword2.text.toString()
 
             //Comprobamos si no esta vacio
+            if (nameStudent.isEmpty()){
+                nameStudent = "Estudiante_Anonimo"
+            }
+
+            if (biographyStudent.isEmpty()){
+                biographyStudent = "Biografía del estudiante."
+            }
+
             if (email.isEmpty() and email2.isEmpty()) {
                 Toast.makeText(this@RegisterActivity, "Por favor introduzca usuario", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
