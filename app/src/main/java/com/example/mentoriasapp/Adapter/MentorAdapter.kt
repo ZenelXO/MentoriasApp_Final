@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import com.example.mentoriasapp.Model.ItemModel
+import com.example.mentoriasapp.activity.MentorDetailsActivity
 import com.example.mentoriasapp.databinding.ActivityMainBinding
 import com.example.mentoriasapp.databinding.ViewholderMentoresBinding
 
@@ -36,9 +37,11 @@ class MentorAdapter(val items:MutableList<ItemModel>):RecyclerView.Adapter<Mento
             .into(holder.binding.subjectPic)
 
         //AQUI ES PARA IR A CADA MENTOR
-        //holder.itemView.setOnClickListener{
-            //val intent = Intent(holder.itemView.context, )
-        //}
+        holder.itemView.setOnClickListener{
+            val intent = Intent(holder.itemView.context, MentorDetailsActivity::class.java)
+            intent.putExtra("object", items[position])
+            holder.itemView.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int = items.size

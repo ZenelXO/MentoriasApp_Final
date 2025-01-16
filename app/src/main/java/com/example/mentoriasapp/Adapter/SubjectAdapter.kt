@@ -2,6 +2,7 @@ package com.example.mentoriasapp.Adapter
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,6 @@ class SubjectAdapter(val items:MutableList<SubjectModel>): RecyclerView.Adapter<
     override fun onBindViewHolder(holder: SubjectAdapter.Viewholder, position: Int) {
         val item = items[position]
         holder.binding.subjectName.text = item.title
-
         Glide.with(holder.itemView.context)
             .load(item.picUrl)
             .into(holder.binding.subjectPic)
