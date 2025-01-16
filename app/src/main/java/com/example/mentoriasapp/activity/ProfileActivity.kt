@@ -1,23 +1,37 @@
 package com.example.mentoriasapp.activity
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.example.mentoriasapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 class ProfileActivity : AppCompatActivity() {
+    private val PICK_IMAGE_REQUEST = 1
+    private lateinit var imageView: ImageView
+    lateinit var encodedImage: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -41,6 +55,11 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
         }
+        imageView = findViewById(R.id.mentor_pic_container)
+        val changePicButton: Button = findViewById(R.id.changePicButton)
+        changePicButton.setOnClickListener{
+            openGallery()
+        }
 
         //Aquí cambiamos el nombre del usuario
         val textViewName: TextView = findViewById(R.id.userName)
@@ -60,13 +79,92 @@ class ProfileActivity : AppCompatActivity() {
         val textViewPic: ImageView = findViewById(R.id.mentor_pic_container)
         searchUserPic { targetUser ->
             if (targetUser.isNotEmpty()) {
-                Glide.with(this)
-                    .load(targetUser)
-                    .into(textViewPic)
-            }else{
-                Glide.with(this)
-                    .load("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ficon-library.com%2Fimages%2Fpersona-icon%2Fpersona-icon-26.jpg&f=1&nofb=1&ipt=6affc600830d25b467b99b595fc98096f80381d35af20a0fda8756171f6e9b04&ipo=images")
-                    .into(textViewPic)
+                // Verificar si es una imagen en Base64 o una URL
+                if (targetUser.startsWith("data:image") || isBase64(targetUser)) {
+                    // Es Base64: Decodificar y mostrar
+                    val decodedBytes = Base64.decode(targetUser.substringAfter(","), Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                    textViewPic.setImageBitmap(bitmap)
+                } else {
+                    // Es una URL: Cargar usando Glide
+                    Glide.with(this)
+                        .load(targetUser)
+                        .into(textViewPic)
+                }
+            } else {
+                Toast.makeText(this, "No se encontró imagen para el usuario", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun isBase64(data: String): Boolean {
+        return try {
+            Base64.decode(data, Base64.DEFAULT)
+            true
+        } catch (e: IllegalArgumentException) {
+            false
+        }
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_REQUEST) {
+            val imageUri = data?.data
+            if (imageUri != null) {
+                imageView.setImageURI(imageUri)
+
+                val base64Image = encodeImageToBase64(imageUri)
+                if (base64Image != null) {
+                    encodedImage = base64Image
+                    updateUserImage { result ->
+                        if (result == "Actualización exitosa") {
+                            recreate()
+                        }
+                    }
+                    Log.i("Base64Image", base64Image)
+                }
+            } else {
+                Toast.makeText(this, "No se seleccionó ninguna imagen", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun encodeImageToBase64(imageUri: Uri): String? {
+        try {
+            val inputStream: InputStream? = contentResolver.openInputStream(imageUri)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
+
+            return Base64.encodeToString(byteArray, Base64.DEFAULT)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    private fun updateUserImage(callback: (String) -> Unit) {
+        searchUserKey { currentUserId ->
+            if (currentUserId.isNotEmpty()) {
+                val dataBaseReference = FirebaseDatabase.getInstance("https://mentoriasapp-default-rtdb.europe-west1.firebasedatabase.app/")
+                val userList = dataBaseReference.getReference("alumnos")
+
+                val userReference = userList.child(currentUserId)
+                userReference.child("picUrl").setValue(encodedImage)
+                    .addOnCompleteListener {
+                        callback("Actualización exitosa")
+                    }
+            } else {
+                callback("Error: No se encontró el usuario")
             }
         }
     }
