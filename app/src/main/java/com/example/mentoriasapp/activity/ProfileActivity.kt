@@ -4,15 +4,18 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -21,6 +24,10 @@ import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.mentoriasapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -77,6 +84,11 @@ class ProfileActivity : AppCompatActivity() {
         }
         //Aquí cambiamos la foto del usuario
         val textViewPic: ImageView = findViewById(R.id.mentor_pic_container)
+        val progressBar: ProgressBar = findViewById(R.id.progressBarProfile)
+
+        // Mostrar el ProgressBar inicialmente
+        progressBar.visibility = View.VISIBLE
+
         searchUserPic { targetUser ->
             if (targetUser.isNotEmpty()) {
                 // Verificar si es una imagen en Base64 o una URL
@@ -85,14 +97,61 @@ class ProfileActivity : AppCompatActivity() {
                     val decodedBytes = Base64.decode(targetUser.substringAfter(","), Base64.DEFAULT)
                     val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
                     textViewPic.setImageBitmap(bitmap)
+                    progressBar.visibility = View.GONE // Ocultar el ProgressBar al finalizar
                 } else {
                     // Es una URL: Cargar usando Glide
                     Glide.with(this)
                         .load(targetUser)
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: com.bumptech.glide.request.target.Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                progressBar.visibility = View.GONE // Ocultar si falla
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: com.bumptech.glide.request.target.Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                progressBar.visibility = View.GONE // Ocultar al cargar con éxito
+                                return false
+                            }
+                        })
                         .into(textViewPic)
                 }
             } else {
-                Toast.makeText(this, "No se encontró imagen para el usuario", Toast.LENGTH_SHORT).show()
+                Glide.with(this)
+                    .load("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ficon-library.com%2Fimages%2Fpersona-icon%2Fpersona-icon-26.jpg&f=1&nofb=1&ipt=6affc600830d25b467b99b595fc98096f80381d35af20a0fda8756171f6e9b04&ipo=images")
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            progressBar.visibility = View.GONE // Ocultar si falla
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            progressBar.visibility = View.GONE // Ocultar al cargar con éxito
+                            return false
+                        }
+                    })
+                    .into(textViewPic)
             }
         }
     }
