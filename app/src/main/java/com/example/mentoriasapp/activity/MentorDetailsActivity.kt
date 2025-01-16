@@ -23,15 +23,16 @@ import com.example.mentoriasapp.Model.ItemModel
 import com.example.mentoriasapp.R
 import com.example.mentoriasapp.databinding.ActivityMentorDetailsBinding
 import com.google.firebase.auth.FirebaseAuth
+import org.w3c.dom.Text
 
 class MentorDetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityMentorDetailsBinding
-    private lateinit var item: ItemModel
+    private lateinit var item:ItemModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMentorDetailsBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_mentor_details)
+        setContentView(binding.root)
 
         // Recuperar el objeto item del Intent
         item = intent.getParcelableExtra("object") ?: throw IllegalArgumentException("Item no encontrado en el Intent")
@@ -43,19 +44,31 @@ class MentorDetailsActivity : BaseActivity() {
             startActivity(intent)
         }
 
+        //Imagen de mentor
+        val mentor_image : ImageView = findViewById(R.id.mentor_pic_container)
+        Glide.with(this)
+            .load(item.picUrl)
+            .into(mentor_image)
+
+        //Descripción del mentor
+        val mentor_description : TextView = findViewById(R.id.mentor_description)
+        mentor_description.text = item.description
+
         // Inicializar la lista de materias
         initSubjectsList()
     }
 
     private fun initSubjectsList() {
         val subjectList = ArrayList<String>()
-
         // Verificar si la lista de datos existe y tiene elementos
-        for (subject in item.mentor_subjects) {
-            subjectList.add(subject.toString())
+        if (::item.isInitialized) {
+            for (subject in item.mentor_subjects) {
+                subjectList.add(subject)
+            }
+
+            binding.subjectList.adapter= MentorSubjectAdapter(subjectList)
+            binding.subjectList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         }
 
-        binding.subjectList.adapter = MentorSubjectAdapter(subjectList)
-        binding.subjectList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     }
 }

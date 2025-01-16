@@ -14,7 +14,7 @@ import com.example.mentoriasapp.R
 import com.example.mentoriasapp.databinding.ViewHolderDetailSubjectBinding
 import com.example.mentoriasapp.databinding.ViewholderSubjectBinding
 
-class MentorSubjectAdapter(val items:ArrayList<String>): RecyclerView.Adapter<MentorSubjectAdapter.Viewholder>(){
+class MentorSubjectAdapter(val items:MutableList<String>): RecyclerView.Adapter<MentorSubjectAdapter.Viewholder>(){
     private var selectedPosition = -1
     private var lastSelectedPosition = -1
     private lateinit var context:Context
@@ -31,9 +31,7 @@ class MentorSubjectAdapter(val items:ArrayList<String>): RecyclerView.Adapter<Me
     }
 
     override fun onBindViewHolder(holder: MentorSubjectAdapter.Viewholder, position: Int) {
-        val item = items[position]
-        holder.binding.subjectDetailText.text = item
-        Log.i("penepolla", "$item")
+        holder.binding.subjectDetailText.text = items[position]
 
         holder.binding.root.setOnClickListener {
             lastSelectedPosition = selectedPosition
@@ -43,10 +41,10 @@ class MentorSubjectAdapter(val items:ArrayList<String>): RecyclerView.Adapter<Me
         }
 
         if(selectedPosition == position){
-            holder.binding.subjectDetailText.setTextColor(context.resources.getColor(R.color.white))
             holder.binding.subjectDetailLayout.setBackgroundResource(R.drawable.blue_bg)
+            holder.binding.subjectDetailText.setTextColor(context.resources.getColor(R.color.white))
         }else{
-            holder.binding.subjectDetailLayout.setBackgroundResource(0)
+            holder.binding.subjectDetailLayout.setBackgroundResource(R.drawable.grey_background)
             holder.binding.subjectDetailText.setTextColor(context.resources.getColor(R.color.black))
         }
     }
