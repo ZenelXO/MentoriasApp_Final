@@ -74,7 +74,6 @@ class MainActivity : BaseActivity() {
         }
     }
 
-
     private fun initSubject(){
         binding.progressBarSubjects.visibility = View.VISIBLE
         viewModel.subjects.observe(this, Observer {binding.viewSubjects.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
