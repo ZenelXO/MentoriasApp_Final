@@ -63,25 +63,43 @@
                     android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent">
 
-                    <TextView
+                    <EditText
                         android:id="@+id/userName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="text"
                         android:text="Itamar"
                         android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"  />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/userBiography"
                         android:layout_width="match_parent"
                         android:layout_height="150dp"
+                        android:ems="10"
+                        android:inputType="textMultiLine"
+                        android:gravity="top|start"
                         android:layout_marginTop="14dp"
                         android:background="@drawable/grey_background"
                         android:padding="16dp"
-                        android:text="Esta es la biografía de itamar, el cual es un alumno muy chiquitin que estudia mucho y saca muy buenas notas.\nPero necesita unas clases de apoyo para entender mejor la universidad y demas cosas."
+                        android:text="Esta es la biografía de Itamar, el cual es un alumno muy chiquitín que estudia mucho y saca muy buenas notas.\nPero necesita unas clases de apoyo para entender mejor la universidad y demás cosas."
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:scrollbars="vertical"
+                        android:overScrollMode="ifContentScrolls"/>
+
+
+                    <Button
+                        android:id="@+id/editProfileButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="170dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Aceptar Cambios"
+                        android:background="@drawable/blue_bg"
+                        android:textColor="@color/white"/>
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

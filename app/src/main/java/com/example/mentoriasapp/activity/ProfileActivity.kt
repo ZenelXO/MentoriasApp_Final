@@ -3,6 +3,8 @@ package com.example.mentoriasapp.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -20,16 +22,24 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
+        //Aqui configuramos el funcionamiento de los botones del Perfil/NavigationBar
         val backButton: ImageView = findViewById(R.id.backButton)
         backButton.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
         val home_button: LinearLayout = findViewById(R.id.home_button)
         home_button.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }
+        val editProfileButton: Button = findViewById(R.id.editProfileButton)
+        editProfileButton.setOnClickListener{
+            updateUserInfo { result ->
+                if (result == "Actualización exitosa") {
+                    recreate()
+                }
+            }
         }
 
         //Aquí cambiamos el nombre del usuario
@@ -58,6 +68,49 @@ class ProfileActivity : AppCompatActivity() {
                     .load("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ficon-library.com%2Fimages%2Fpersona-icon%2Fpersona-icon-26.jpg&f=1&nofb=1&ipt=6affc600830d25b467b99b595fc98096f80381d35af20a0fda8756171f6e9b04&ipo=images")
                     .into(textViewPic)
             }
+        }
+    }
+
+    private fun updateUserInfo(callback: (String) -> Unit) {
+        searchUserKey { currentUserId ->
+            if (currentUserId.isNotEmpty()) {
+                val dataBaseReference = FirebaseDatabase.getInstance("https://mentoriasapp-default-rtdb.europe-west1.firebasedatabase.app/")
+                val userList = dataBaseReference.getReference("alumnos")
+                val changedName = findViewById<EditText>(R.id.userName).text.toString()
+                val changedBiography = findViewById<EditText>(R.id.userBiography).text.toString()
+
+                val userReference = userList.child(currentUserId)
+                userReference.child("name").setValue(changedName)
+                userReference.child("biografia").setValue(changedBiography)
+                    .addOnCompleteListener {
+                        callback("Actualización exitosa")
+                    }
+            } else {
+                callback("Error: No se encontró el usuario")
+            }
+        }
+    }
+
+    private fun searchUserKey(callback: (String) -> Unit) {
+        val emailOfUser = FirebaseAuth.getInstance().currentUser?.email.toString()
+        val dataBaseReference = FirebaseDatabase.getInstance("https://mentoriasapp-default-rtdb.europe-west1.firebasedatabase.app/")
+        val userList = dataBaseReference.getReference("alumnos")
+
+        userList.get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                for (userSnapshot in dataSnapshot.children) {
+                    val email = userSnapshot.child("email").value.toString()
+                    if (email == emailOfUser) {
+                        val targetUser = userSnapshot.key.toString()
+                        callback(targetUser)
+                        return@addOnSuccessListener
+                    }
+                }
+            }
+            callback("")
+        }.addOnFailureListener { exception ->
+            Log.e("FirebaseError", "Error al obtener los alumnos", exception)
+            callback("")
         }
     }
 
