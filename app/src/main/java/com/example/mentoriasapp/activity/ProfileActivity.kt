@@ -1,6 +1,7 @@
 package com.example.mentoriasapp.activity
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -37,6 +38,7 @@ import java.io.InputStream
 
 class ProfileActivity : AppCompatActivity() {
     private val PICK_IMAGE_REQUEST = 1
+    private val CAMERA_REQUEST = 2
     private lateinit var imageView: ImageView
     lateinit var encodedImage: String
 
@@ -71,7 +73,7 @@ class ProfileActivity : AppCompatActivity() {
         imageView = findViewById(R.id.mentor_pic_container)
         val changePicButton: ImageButton = findViewById(R.id.changePicButton)
         changePicButton.setOnClickListener{
-            openGallery()
+            showImageSourceDialog()
         }
 
         //Aquí cambiamos el nombre del usuario
@@ -171,41 +173,97 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    // Mostrar diálogo para elegir entre galería o cámara
+    private fun showImageSourceDialog() {
+        val options = arrayOf("Abrir galería", "Tomar foto con cámara")
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Selecciona una opción")
+        builder.setItems(options) { dialog, which ->
+            when (which) {
+                0 -> openGallery() // Opción "Abrir galería"
+                1 -> openCamera()  // Opción "Tomar foto con cámara"
+            }
+        }
+        builder.show()
+    }
+
+    // Abrir galería
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
+    // Abrir cámara
+    private fun openCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, CAMERA_REQUEST)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_REQUEST) {
-            val imageUri = data?.data
-            if (imageUri != null) {
-                imageView.setImageURI(imageUri)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                PICK_IMAGE_REQUEST -> {
+                    val imageUri = data?.data
+                    if (imageUri != null) {
+                        imageView.setImageURI(imageUri)
 
-                val base64Image = encodeImageToBase64(imageUri)
-                if (base64Image != null) {
-                    encodedImage = base64Image
-                    updateUserImage { result ->
-                        if (result == "Actualización exitosa") {
-                            recreate()
+                        val base64Image = encodeImageToBase64(imageUri)
+                        if (base64Image != null) {
+                            encodedImage = base64Image
+                            updateUserImage { result ->
+                                if (result == "Actualización exitosa") {
+                                    recreate()
+                                }
+                            }
+                            Log.i("Base64Image", base64Image)
                         }
+                    } else {
+                        Toast.makeText(this, "No se seleccionó ninguna imagen", Toast.LENGTH_SHORT).show()
                     }
-                    Log.i("Base64Image", base64Image)
                 }
-            } else {
-                Toast.makeText(this, "No se seleccionó ninguna imagen", Toast.LENGTH_SHORT).show()
+
+                CAMERA_REQUEST -> {
+                    val photoBitmap = data?.extras?.get("data") as? Bitmap
+                    if (photoBitmap != null) {
+                        imageView.setImageBitmap(photoBitmap)
+
+                        val base64Image = encodeImageToBase64(photoBitmap)
+                        if (base64Image != null) {
+                            encodedImage = base64Image
+                            updateUserImage { result ->
+                                if (result == "Actualización exitosa") {
+                                    recreate()
+                                }
+                            }
+                            Log.i("Base64Image", base64Image)
+                        }
+                    } else {
+                        Toast.makeText(this, "No se tomó ninguna foto", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
 
-    private fun encodeImageToBase64(imageUri: Uri): String? {
+    private fun encodeImageToBase64(input: Any): String? {
         try {
-            val inputStream: InputStream? = contentResolver.openInputStream(imageUri)
-            val bitmap = BitmapFactory.decodeStream(inputStream)
+            val bitmap: Bitmap = when (input) {
+                is Uri -> {
+                    // Si la entrada es un Uri, decodifica el stream del Uri
+                    val inputStream: InputStream? = contentResolver.openInputStream(input)
+                    BitmapFactory.decodeStream(inputStream)
+                }
+                is Int -> {
+                    // Si la entrada es un recurso interno (ID), carga el Bitmap desde los recursos
+                    BitmapFactory.decodeResource(resources, input)
+                }
+                else -> throw IllegalArgumentException("El tipo de entrada no es compatible")
+            }
 
+            // Codifica el Bitmap a Base64
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
             val byteArray = byteArrayOutputStream.toByteArray()
@@ -216,6 +274,7 @@ class ProfileActivity : AppCompatActivity() {
             return null
         }
     }
+
 
     private fun updateUserImage(callback: (String) -> Unit) {
         searchUserKey { currentUserId ->
