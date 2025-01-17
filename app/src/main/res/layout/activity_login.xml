@@ -6,70 +6,78 @@
     android:layout_height="match_parent"
     android:background="@drawable/fondo_app2">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="591dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="331dp"
+            android:src="@drawable/logo_ulpgc" />
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="match_parent"
-                android:layout_height="331dp"
-                android:layout_margin="32dp"
-                android:layout_marginTop="1dp"
-                app:srcCompat="@drawable/logo_ulpgc"
-                android:visibility="visible"/>
+    </LinearLayout>
 
-            <EditText
-                android:id="@+id/editTextTextEmailAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginRight="32dp"
-                android:backgroundTint="#FFC107"
-                android:ems="10"
-                android:hint="Usuario: "
-                android:inputType="textEmailAddress" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginTop="400dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/editTextTextPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginTop="62dp"
-                android:layout_marginRight="32dp"
-                android:backgroundTint="#FFC107"
-                android:ems="10"
-                android:hint="Contraseña: "
-                android:inputType="textPassword" />
+        <EditText
+            android:id="@+id/editTextTextEmailAddress3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFC107"
+            android:ems="10"
+            android:textSize="19sp"
+            android:hint="Usuario: "
+            android:inputType="textEmailAddress" />
 
-            <Button
-                android:background="@color/yellow"
-                android:id="@+id/login_button"
-                android:layout_width="match_parent"
-                android:layout_height="61dp"
-                android:layout_marginLeft="62dp"
-                android:layout_marginTop="92dp"
-                android:layout_marginRight="62dp"
-                android:text="Entrar"
-                android:textColor="@color/background_blue"/>
+        <EditText
+            android:id="@+id/editTextTextPassword3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="62dp"
+            android:backgroundTint="#FFC107"
+            android:ems="10"
+            android:textSize="19sp"
+            android:hint="Contraseña: "
+            android:inputType="textPassword" />
 
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginTop="92dp"
-                android:layout_marginRight="32dp"
-                android:text="Todos los derechos reservados por ULPGC"
-                android:textAlignment="center"
-                android:textColor="@color/white"/>
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="92dp"
+            android:layout_marginRight="62dp"
+            android:background="@color/yellow"
+            android:text="Entrar"
+            android:textColor="@color/background_blue" />
 
-        </LinearLayout>
-    </ScrollView>
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="92dp"
+            android:layout_marginRight="32dp"
+            android:text="Todos los derechos reservados por ULPGC"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

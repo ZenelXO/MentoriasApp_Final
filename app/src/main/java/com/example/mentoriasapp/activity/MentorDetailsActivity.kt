@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -56,18 +57,6 @@ class MentorDetailsActivity : BaseActivity() {
             startActivity(intent)
         }
 
-        // Botón para reservar
-        val book_mentor_button: AppCompatButton = findViewById(R.id.book_mentor_button)
-        book_mentor_button.setOnClickListener {
-            showDatePicker { selectedDate ->
-                addUserBookings(selectedDate) { result ->
-                    if (result == "Actualización exitosa") {
-                        Log.i("Reserva", "Reservado")
-                    }
-                }
-            }
-        }
-
         //Caracteristicas del mentor
         val mentor_name: TextView = findViewById(R.id.mentor_name_detail)
         mentor_name.text = item.name
@@ -82,6 +71,19 @@ class MentorDetailsActivity : BaseActivity() {
         Glide.with(this)
             .load(item.picUrl)
             .into(mentor_image)
+
+        // Botón para reservar
+        val book_mentor_button: AppCompatButton = findViewById(R.id.book_mentor_button)
+        book_mentor_button.setOnClickListener {
+            showDatePicker { selectedDate ->
+                addUserBookings(selectedDate) { result ->
+                    if (result == "Actualización exitosa") {
+                        Log.i("Reserva", "Reservado")
+                        Toast.makeText(this, "Mentoría con " + "${mentor_name.text}, " + "reservada!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
 
         // Inicializar la lista de materias
         initSubjectsList()

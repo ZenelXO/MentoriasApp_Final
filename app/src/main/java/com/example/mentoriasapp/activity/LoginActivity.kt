@@ -18,8 +18,8 @@ class LoginActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
-        val editTextEmail: EditText = findViewById(R.id.editTextTextEmailAddress)
-        val editTextPassword: EditText = findViewById(R.id.editTextTextPassword)
+        val editTextEmail: EditText = findViewById(R.id.editTextTextEmailAddress3)
+        val editTextPassword: EditText = findViewById(R.id.editTextTextPassword3)
         val loginButton: Button = findViewById(R.id.login_button)
         lateinit var auth: FirebaseAuth
         auth = Firebase.auth
