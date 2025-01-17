@@ -75,8 +75,9 @@
                     <ImageView
                         android:id="@+id/imageView5"
                         android:layout_width="41dp"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@android:drawable/btn_star_big_on" />
+                        android:layout_height="25dp"
+                        app:srcCompat="@android:drawable/btn_star_big_on"
+                        android:layout_gravity="center_vertical"/>
 
                     <TextView
                         android:id="@+id/mentor_rating_detail"

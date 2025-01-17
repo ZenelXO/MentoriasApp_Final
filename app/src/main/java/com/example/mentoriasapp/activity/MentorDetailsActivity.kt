@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import org.w3c.dom.Text
 import java.util.Calendar
+import java.util.Locale
 
 class MentorDetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityMentorDetailsBinding
@@ -36,6 +37,14 @@ class MentorDetailsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMentorDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //Poner el idioma en español
+        val locale = Locale("es", "ES")
+        Locale.setDefault(locale)
+
+        val config = resources.configuration
+        config.setLocale(locale)
+        createConfigurationContext(config)
 
         // Recuperar el objeto item del Intent
         item = intent.getParcelableExtra("object") ?: throw IllegalArgumentException("Item no encontrado en el Intent")

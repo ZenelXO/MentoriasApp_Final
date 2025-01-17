@@ -56,20 +56,21 @@
                     android:padding="16dp"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="16dp"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    tools:srcCompat="@tools:sample/avatars"
+                    tools:ignore="MissingConstraints" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/changePicButton"
                     android:layout_width="54dp"
                     android:layout_height="47dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="28dp"
+                    android:layout_marginEnd="60dp"
                     android:background="@drawable/yellow_bg"
-                    android:text="+"
                     android:textColor="@color/black"
                     android:textSize="26sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/mentor_pic_container" />
+                    app:layout_constraintTop_toTopOf="@+id/mentor_pic_container"
+                    app:srcCompat="@android:drawable/ic_menu_edit" />
 
                 <ProgressBar
                     android:id="@+id/progressBarProfile"
@@ -143,7 +144,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -167,18 +168,21 @@
 
                     <ImageView
                         android:id="@+id/imageView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        app:srcCompat="@android:drawable/ic_menu_today" />
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:tint="#FFFFFF"
+                        app:srcCompat="@drawable/calendario_24" />
 
                     <TextView
                         android:id="@+id/textView8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Calendar"
+                        android:text="Calendario"
                         android:textAlignment="center"
+                        android:textColor="@color/white"
                         android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -191,11 +195,14 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="32dp"
-                        android:layout_marginTop="4dp"
-                        app:srcCompat="@android:drawable/ic_dialog_dialer" />
+                        android:id="@+id/homeButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+
+                        android:tint="#FFFFFF"
+                        app:srcCompat="@drawable/aplicaciones_24" />
 
                     <TextView
                         android:id="@+id/textView9"
@@ -204,10 +211,38 @@
                         android:layout_marginTop="4dp"
                         android:text="Home"
                         android:textAlignment="center"
+                        android:textColor="@color/white"
                         android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/profile_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:tint="#FFFFFF"
+                        app:srcCompat="@drawable/usuario_24" />
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Perfil"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.bottomnavigation.BottomNavigationView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
