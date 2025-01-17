@@ -105,7 +105,7 @@ class ProfileActivity : AppCompatActivity() {
                     val decodedBytes = Base64.decode(targetUser.substringAfter(","), Base64.DEFAULT)
                     val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
                     textViewPic.setImageBitmap(bitmap)
-                    progressBar.visibility = View.GONE // Ocultar el ProgressBar al finalizar
+                    progressBar.visibility = View.GONE
                 } else {
                     // Es una URL: Cargar usando Glide
                     Glide.with(this)
@@ -117,7 +117,7 @@ class ProfileActivity : AppCompatActivity() {
                                 target: com.bumptech.glide.request.target.Target<Drawable>?,
                                 isFirstResource: Boolean
                             ): Boolean {
-                                progressBar.visibility = View.GONE // Ocultar si falla
+                                progressBar.visibility = View.GONE
                                 return false
                             }
 
@@ -128,7 +128,7 @@ class ProfileActivity : AppCompatActivity() {
                                 dataSource: DataSource?,
                                 isFirstResource: Boolean
                             ): Boolean {
-                                progressBar.visibility = View.GONE // Ocultar al cargar con éxito
+                                progressBar.visibility = View.GONE
                                 return false
                             }
                         })
@@ -144,7 +144,7 @@ class ProfileActivity : AppCompatActivity() {
                             target: com.bumptech.glide.request.target.Target<Drawable>?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            progressBar.visibility = View.GONE // Ocultar si falla
+                            progressBar.visibility = View.GONE
                             return false
                         }
 
@@ -155,7 +155,7 @@ class ProfileActivity : AppCompatActivity() {
                             dataSource: DataSource?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            progressBar.visibility = View.GONE // Ocultar al cargar con éxito
+                            progressBar.visibility = View.GONE
                             return false
                         }
                     })
@@ -180,8 +180,8 @@ class ProfileActivity : AppCompatActivity() {
         builder.setTitle("Selecciona una opción")
         builder.setItems(options) { dialog, which ->
             when (which) {
-                0 -> openGallery() // Opción "Abrir galería"
-                1 -> openCamera()  // Opción "Tomar foto con cámara"
+                0 -> openGallery()
+                1 -> openCamera()
             }
         }
         builder.show()
@@ -233,12 +233,17 @@ class ProfileActivity : AppCompatActivity() {
                         val base64Image = encodeImageToBase64(photoBitmap)
                         if (base64Image != null) {
                             encodedImage = base64Image
+                            Log.i("Base64Image", base64Image)
+
                             updateUserImage { result ->
                                 if (result == "Actualización exitosa") {
                                     recreate()
+                                } else {
+                                    Log.e("ImageUpdate", "Error: $result")
                                 }
                             }
-                            Log.i("Base64Image", base64Image)
+                        } else {
+                            Toast.makeText(this, "Error al codificar la imagen", Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         Toast.makeText(this, "No se tomó ninguna foto", Toast.LENGTH_SHORT).show()
@@ -251,19 +256,16 @@ class ProfileActivity : AppCompatActivity() {
     private fun encodeImageToBase64(input: Any): String? {
         try {
             val bitmap: Bitmap = when (input) {
+                is Bitmap -> input
                 is Uri -> {
-                    // Si la entrada es un Uri, decodifica el stream del Uri
                     val inputStream: InputStream? = contentResolver.openInputStream(input)
                     BitmapFactory.decodeStream(inputStream)
                 }
                 is Int -> {
-                    // Si la entrada es un recurso interno (ID), carga el Bitmap desde los recursos
                     BitmapFactory.decodeResource(resources, input)
                 }
                 else -> throw IllegalArgumentException("El tipo de entrada no es compatible")
             }
-
-            // Codifica el Bitmap a Base64
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
             val byteArray = byteArrayOutputStream.toByteArray()
