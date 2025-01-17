@@ -47,10 +47,8 @@ class CalendarActivity : AppCompatActivity() {
 
                     dateList.add(bookingDate)
                 }
-                val bookingModel = BookingsModel(date = dateList)
-                booking = bookingModel
 
-                initBookingLists()
+                initBookingLists(dateList)
             }
         }
 
@@ -156,14 +154,9 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
-    private fun initBookingLists() {
-        val bookingList = ArrayList<String>()
-        // Verificar si la lista de datos existe y tiene elementos
-        if (::booking.isInitialized) {
-            bookingList.addAll(booking.date)
+    private fun initBookingLists(dateList: ArrayList<String>) {
 
-            binding.recyclerBookingsView.adapter= CalendarAdapter(bookingList)
-            binding.recyclerBookingsView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        }
+        binding.recyclerBookingsView.adapter= CalendarAdapter(dateList)
+        binding.recyclerBookingsView.layoutManager = LinearLayoutManager(this)
     }
 }

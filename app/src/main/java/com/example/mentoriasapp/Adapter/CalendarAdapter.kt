@@ -18,7 +18,7 @@ import com.example.mentoriasapp.databinding.ViewHolderDetailSubjectBinding
 import com.example.mentoriasapp.databinding.ViewholderCalendarBinding
 import com.example.mentoriasapp.databinding.ViewholderSubjectBinding
 
-class CalendarAdapter(val items:MutableList<String>): RecyclerView.Adapter<CalendarAdapter.Viewholder>(){
+class CalendarAdapter(val items:ArrayList<String>): RecyclerView.Adapter<CalendarAdapter.Viewholder>(){
     private lateinit var context:Context
     
     class Viewholder(val binding:ViewholderCalendarBinding):RecyclerView.ViewHolder(binding.root) {
@@ -36,9 +36,6 @@ class CalendarAdapter(val items:MutableList<String>): RecyclerView.Adapter<Calen
         holder.binding.calendarText.text = items[position]
         val hola = items[position]
         Log.i("buenas", "$hola")
-
-        val intent = Intent(holder.itemView.context, CalendarActivity::class.java)
-        intent.putExtra("object", items[position])
     }
 
     override fun getItemCount(): Int = items.size

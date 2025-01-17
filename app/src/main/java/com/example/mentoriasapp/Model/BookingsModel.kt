@@ -19,12 +19,12 @@ data class BookingsModel(
 
     }
 
-    companion object CREATOR : Parcelable.Creator<ItemModel> {
-        override fun createFromParcel(parcel: Parcel): ItemModel {
-            return ItemModel(parcel)
+    companion object CREATOR : Parcelable.Creator<BookingsModel> {
+        override fun createFromParcel(parcel: Parcel): BookingsModel {
+            return BookingsModel(parcel)
         }
 
-        override fun newArray(size: Int): Array<ItemModel?> {
+        override fun newArray(size: Int): Array<BookingsModel?> {
             return arrayOfNulls(size)
         }
     }
