@@ -6,18 +6,27 @@ import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.applandeo.materialcalendarview.CalendarDay
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.listeners.OnCalendarDayClickListener
 import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener
+import com.example.mentoriasapp.Adapter.CalendarAdapter
+import com.example.mentoriasapp.Adapter.MentorSubjectAdapter
+import com.example.mentoriasapp.Model.BookingsModel
+import com.example.mentoriasapp.Model.ItemModel
 import com.example.mentoriasapp.R
+import com.example.mentoriasapp.databinding.ActivityCalendarBinding
+import com.example.mentoriasapp.databinding.ActivityMentorDetailsBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import java.util.Calendar
 
 class CalendarActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityCalendarBinding
     private lateinit var calendarView: CalendarView
+    private lateinit var booking: BookingsModel
     private var books: MutableMap<String, String> = mutableMapOf()
     public var bookDay = ""
     public var bookMonth = ""
@@ -26,7 +35,25 @@ class CalendarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_calendar)
+
+        searchCurrentUserBookings { listOfBookings ->
+            if (listOfBookings != null) {
+                val dateList = ArrayList<String>()
+
+                for (bookingSnapshot in listOfBookings.children) {
+                    val bookingDate = bookingSnapshot.value.toString()
+
+                    dateList.add(bookingDate)
+                }
+                val bookingModel = BookingsModel(date = dateList)
+                booking = bookingModel
+
+                initBookingLists()
+            }
+        }
+
 
         calendarView = findViewById(R.id.calendarView)
         val calendars: ArrayList<CalendarDay> = ArrayList()
@@ -105,6 +132,7 @@ class CalendarActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, "$month-$year", Toast.LENGTH_SHORT).show()
             }
         })
+
     }
 
     private fun searchCurrentUserBookings (callback: (DataSnapshot) -> Unit){
@@ -125,6 +153,17 @@ class CalendarActivity : AppCompatActivity() {
             }
         }.addOnFailureListener { exception ->
             Log.e("FirebaseError", "Error al obtener los alumnos", exception)
+        }
+    }
+
+    private fun initBookingLists() {
+        val bookingList = ArrayList<String>()
+        // Verificar si la lista de datos existe y tiene elementos
+        if (::booking.isInitialized) {
+            bookingList.addAll(booking.date)
+
+            binding.recyclerBookingsView.adapter= CalendarAdapter(bookingList)
+            binding.recyclerBookingsView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         }
     }
 }
