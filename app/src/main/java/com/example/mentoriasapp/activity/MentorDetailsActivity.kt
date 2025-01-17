@@ -1,5 +1,6 @@
 package com.example.mentoriasapp.activity
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,7 +24,9 @@ import com.example.mentoriasapp.Model.ItemModel
 import com.example.mentoriasapp.R
 import com.example.mentoriasapp.databinding.ActivityMentorDetailsBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import org.w3c.dom.Text
+import java.util.Calendar
 
 class MentorDetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityMentorDetailsBinding
@@ -42,6 +45,18 @@ class MentorDetailsActivity : BaseActivity() {
         back_button.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }
+
+        // Botón para reservar
+        val book_mentor_button: AppCompatButton = findViewById(R.id.book_mentor_button)
+        book_mentor_button.setOnClickListener {
+            showDatePicker { selectedDate ->
+                addUserBookings(selectedDate) { result ->
+                    if (result == "Actualización exitosa") {
+                        Log.i("Reserva", "Reservado")
+                    }
+                }
+            }
         }
 
         //Caracteristicas del mentor
@@ -63,6 +78,28 @@ class MentorDetailsActivity : BaseActivity() {
         initSubjectsList()
     }
 
+    private fun showDatePicker(onDateSelected: (String) -> Unit) {
+        // Obtener la fecha actual
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+
+        // Crear el DatePickerDialog
+        val datePickerDialog = DatePickerDialog(
+            this,
+            { _, year, month, dayOfMonth ->
+                val formattedDate = String.format("%02d/%02d/%d", dayOfMonth, month + 1, year)
+                onDateSelected(formattedDate)
+            },
+            currentYear,
+            currentMonth,
+            currentDay
+        )
+        // Mostrar el DatePickerDialog
+        datePickerDialog.show()
+    }
+
     private fun initSubjectsList() {
         val subjectList = ArrayList<String>()
         // Verificar si la lista de datos existe y tiene elementos
@@ -74,6 +111,45 @@ class MentorDetailsActivity : BaseActivity() {
             binding.subjectList.adapter= MentorSubjectAdapter(subjectList)
             binding.subjectList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         }
+    }
 
+    private fun addUserBookings(bookingDate: String, callback: (String) -> Unit) {
+        searchUserKey { currentUserId ->
+            if (currentUserId.isNotEmpty()) {
+                val dataBaseReference = FirebaseDatabase.getInstance("https://mentoriasapp-default-rtdb.europe-west1.firebasedatabase.app/")
+                val userList = dataBaseReference.getReference("alumnos")
+
+                val userReference = userList.child(currentUserId)
+                userReference.child("bookings").child(item.name).setValue(bookingDate)
+                    .addOnCompleteListener {
+                        callback("Actualización exitosa")
+                    }
+            } else {
+                callback("Error: No se encontró el usuario")
+            }
+        }
+    }
+
+    private fun searchUserKey(callback: (String) -> Unit) {
+        val emailOfUser = FirebaseAuth.getInstance().currentUser?.email.toString()
+        val dataBaseReference = FirebaseDatabase.getInstance("https://mentoriasapp-default-rtdb.europe-west1.firebasedatabase.app/")
+        val userList = dataBaseReference.getReference("alumnos")
+
+        userList.get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                for (userSnapshot in dataSnapshot.children) {
+                    val email = userSnapshot.child("email").value.toString()
+                    if (email == emailOfUser) {
+                        val targetUser = userSnapshot.key.toString()
+                        callback(targetUser)
+                        return@addOnSuccessListener
+                    }
+                }
+            }
+            callback("")
+        }.addOnFailureListener { exception ->
+            Log.e("FirebaseError", "Error al obtener los alumnos", exception)
+            callback("")
+        }
     }
 }

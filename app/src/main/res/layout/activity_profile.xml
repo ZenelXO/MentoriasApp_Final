@@ -60,13 +60,14 @@
 
                 <Button
                     android:id="@+id/changePicButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="24dp"
-                    android:text="Cambiar"
-                    android:textColor="@color/black"
+                    android:layout_width="54dp"
+                    android:layout_height="47dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="28dp"
                     android:background="@drawable/yellow_bg"
+                    android:text="+"
+                    android:textColor="@color/black"
+                    android:textSize="26sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/mentor_pic_container" />
 
@@ -158,6 +159,7 @@
                 android:layout_marginBottom="8dp">
 
                 <LinearLayout
+                    android:id="@+id/calendarButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"

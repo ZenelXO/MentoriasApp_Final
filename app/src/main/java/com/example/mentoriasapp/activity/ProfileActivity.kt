@@ -49,6 +49,11 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+        val calendarButton: LinearLayout = findViewById(R.id.calendarButton)
+        calendarButton.setOnClickListener{
+            val intent = Intent(this, CalendarActivity::class.java)
+            startActivity(intent)
+        }
         val home_button: LinearLayout = findViewById(R.id.home_button)
         home_button.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)

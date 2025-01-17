@@ -47,6 +47,13 @@ class MainActivity : BaseActivity() {
             startActivity(intent)
         }
 
+        //Boton para acceder al calendario
+        val calendarButton: LinearLayout = findViewById(R.id.calendarButton)
+        calendarButton.setOnClickListener{
+            val intent = Intent(this, CalendarActivity::class.java)
+            startActivity(intent)
+        }
+
         initSubject()
         initMentor()
     }
