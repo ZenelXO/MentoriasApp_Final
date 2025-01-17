@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -68,7 +69,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
         imageView = findViewById(R.id.mentor_pic_container)
-        val changePicButton: Button = findViewById(R.id.changePicButton)
+        val changePicButton: ImageButton = findViewById(R.id.changePicButton)
         changePicButton.setOnClickListener{
             openGallery()
         }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroud_login">
+    android:background="@drawable/fondo_app2">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,17 +18,18 @@
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="331dp"
                 android:layout_margin="32dp"
                 android:layout_marginTop="1dp"
-                app:srcCompat="@drawable/logo_ulpgc2" />
+                app:srcCompat="@drawable/logo_ulpgc"
+                android:visibility="visible"/>
 
             <EditText
                 android:id="@+id/editTextTextEmailAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
-                android:layout_marginTop="162dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginRight="32dp"
                 android:backgroundTint="#FFC107"
                 android:ems="10"

@@ -85,12 +85,6 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ver todas"
-                    android:textColor="@color/yellow" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -137,12 +131,6 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView71"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ver todos"
-                    android:textColor="@color/yellow" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -203,18 +191,21 @@
 
                     <ImageView
                         android:id="@+id/imageView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        app:srcCompat="@android:drawable/ic_menu_today" />
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:tint="#FFFFFF"
+                        app:srcCompat="@drawable/calendario_24" />
 
                     <TextView
                         android:id="@+id/textView8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Calendar"
+                        android:text="Calendario"
                         android:textAlignment="center"
+                        android:textColor="@color/white"
                         android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -226,11 +217,14 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="32dp"
-                        android:layout_marginTop="4dp"
-                        app:srcCompat="@android:drawable/ic_dialog_dialer" />
+                        android:id="@+id/homeButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+
+                        android:tint="#FFFFFF"
+                        app:srcCompat="@drawable/aplicaciones_24" />
 
                     <TextView
                         android:id="@+id/textView9"
@@ -239,6 +233,7 @@
                         android:layout_marginTop="4dp"
                         android:text="Home"
                         android:textAlignment="center"
+                        android:textColor="@color/white"
                         android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -252,10 +247,12 @@
 
                     <ImageView
                         android:id="@+id/imageView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:srcCompat="?android:attr/fingerprintAuthDrawable" />
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:tint="#FFFFFF"
+                        app:srcCompat="@drawable/usuario_24" />
 
                     <TextView
                         android:id="@+id/textView10"
@@ -264,6 +261,7 @@
                         android:layout_marginTop="4dp"
                         android:text="Perfil"
                         android:textAlignment="center"
+                        android:textColor="@color/white"
                         android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
