@@ -97,6 +97,7 @@ class ProfileActivity : AppCompatActivity() {
         // Mostrar el ProgressBar inicialmente
         progressBar.visibility = View.VISIBLE
 
+        //Aqui se cargara la imagen del usuario en la pagina
         searchUserPic { targetUser ->
             if (targetUser.isNotEmpty()) {
                 // Verificar si es una imagen en Base64 o una URL
