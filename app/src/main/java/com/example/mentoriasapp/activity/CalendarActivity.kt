@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import java.util.Calendar
+import java.util.Locale
 
 class CalendarActivity : AppCompatActivity() {
     private lateinit var calendarView: CalendarView
@@ -26,6 +27,14 @@ class CalendarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Configurar la localización a español
+        val locale = Locale("es", "ES")
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        createConfigurationContext(config)
+
         setContentView(R.layout.activity_calendar)
 
         calendarView = findViewById(R.id.calendarView)
