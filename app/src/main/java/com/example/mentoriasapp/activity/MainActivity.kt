@@ -92,7 +92,7 @@ class MainActivity : BaseActivity() {
         binding.progressBarSubjects.visibility = View.VISIBLE
 
         viewModel.subjects.observe(this, Observer { subjectList ->
-            val filteredSubjects = subjectList.drop(1).toMutableList()
+            val filteredSubjects = subjectList.toMutableList()
 
             binding.viewSubjects.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
             binding.viewSubjects.adapter = SubjectAdapter(filteredSubjects) { selectedSubjectName ->
