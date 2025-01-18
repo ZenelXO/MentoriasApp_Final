@@ -14,49 +14,52 @@ import com.example.mentoriasapp.Model.SubjectModel
 import com.example.mentoriasapp.R
 import com.example.mentoriasapp.databinding.ViewholderSubjectBinding
 
-class SubjectAdapter(val items:MutableList<SubjectModel>): RecyclerView.Adapter<SubjectAdapter.Viewholder>(){
+class SubjectAdapter(
+    val items: MutableList<SubjectModel>,
+    val onSubjectSelected: (String) -> Unit
+) : RecyclerView.Adapter<SubjectAdapter.Viewholder>() {
     private var selectedPosition = -1
     private var lastSelectedPosition = -1
-    private lateinit var context:Context
+    private lateinit var context: Context
 
-    class Viewholder(val binding:ViewholderSubjectBinding):RecyclerView.ViewHolder(binding.root) {
+    class Viewholder(val binding: ViewholderSubjectBinding) : RecyclerView.ViewHolder(binding.root)
 
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectAdapter.Viewholder {
-        context=parent.context
-        val binding=ViewholderSubjectBinding.inflate(LayoutInflater.from(context), parent, false)
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Viewholder {
+        context = parent.context
+        val binding = ViewholderSubjectBinding.inflate(LayoutInflater.from(context), parent, false)
         return Viewholder(binding)
     }
 
-    override fun onBindViewHolder(holder: SubjectAdapter.Viewholder, position: Int) {
+    override fun onBindViewHolder(holder: Viewholder, position: Int) {
         val item = items[position]
         holder.binding.subjectName.text = item.title
         Glide.with(holder.itemView.context)
             .load(item.picUrl)
             .into(holder.binding.subjectPic)
 
+        if (position == selectedPosition) {
+            holder.binding.subjectPic.setBackgroundResource(0)
+            holder.binding.mainLayout.setBackgroundResource(R.drawable.blue_bg)
+            holder.binding.subjectName.visibility = View.VISIBLE
+        } else {
+            holder.binding.subjectPic.setBackgroundResource(R.drawable.grey_background)
+            holder.binding.mainLayout.setBackgroundResource(0)
+            holder.binding.subjectName.visibility = View.GONE
+        }
+
         holder.binding.root.setOnClickListener {
             lastSelectedPosition = selectedPosition
             selectedPosition = position
             notifyItemChanged(lastSelectedPosition)
             notifyItemChanged(selectedPosition)
+
+            onSubjectSelected(item.title)
         }
 
         holder.binding.subjectName.setTextColor(context.resources.getColor(R.color.white))
-        if(selectedPosition == position){
-            holder.binding.subjectPic.setBackgroundResource(0)
-            holder.binding.mainLayout.setBackgroundResource(R.drawable.blue_bg)
-
-            holder.binding.subjectName.visibility = View.VISIBLE
-        }else{
-            holder.binding.subjectPic.setBackgroundResource(R.drawable.grey_background)
-            holder.binding.mainLayout.setBackgroundResource(0)
-
-            holder.binding.subjectName.visibility = View.GONE
-        }
     }
+
 
     override fun getItemCount(): Int = items.size
 }
+

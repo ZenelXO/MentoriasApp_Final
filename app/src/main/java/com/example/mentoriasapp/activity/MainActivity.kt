@@ -26,6 +26,7 @@ import com.google.firebase.database.values
 class MainActivity : BaseActivity() {
     private val viewModel = MainViewModel()
     private lateinit var binding: ActivityMainBinding
+    private var selectedSubject: String = "Todo"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,9 +54,15 @@ class MainActivity : BaseActivity() {
             val intent = Intent(this, CalendarActivity::class.java)
             startActivity(intent)
         }
-
-        initSubject()
         initMentor()
+
+        initSubject() { selectedSubjectName ->
+            selectedSubject = selectedSubjectName
+            Log.d("SelectedSubject", "Asignatura seleccionada: $selectedSubject")
+
+            initMentor()
+        }
+
     }
 
     private fun searchUser(callback: (String) -> Unit) {
@@ -81,24 +88,49 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun initSubject(){
+    private fun initSubject(callback: (String) -> Unit) {
         binding.progressBarSubjects.visibility = View.VISIBLE
-        viewModel.subjects.observe(this, Observer {binding.viewSubjects.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
-            binding.viewSubjects.adapter = SubjectAdapter(it)
+
+        viewModel.subjects.observe(this, Observer { subjectList ->
+            val filteredSubjects = subjectList.drop(1).toMutableList()
+
+            binding.viewSubjects.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+            binding.viewSubjects.adapter = SubjectAdapter(filteredSubjects) { selectedSubjectName ->
+                selectedSubject = selectedSubjectName
+                Log.d("SelectedSubject", "Asignatura seleccionada: $selectedSubject")
+
+                callback(selectedSubject)
+            }
+
             binding.progressBarSubjects.visibility = View.GONE
         })
 
         viewModel.loadSubjects()
     }
 
-    private fun initMentor(){
+
+
+    private fun initMentor() {
         binding.progressBarMentores.visibility = View.VISIBLE
-        viewModel.mentores.observe(this, Observer {binding.viewMentores.layoutManager =
-            GridLayoutManager(this@MainActivity, 2)
-            binding.viewMentores.adapter = MentorAdapter(it)
+
+        viewModel.mentores.observe(this, Observer { mentorList ->
+
+            val filteredMentors = if (selectedSubject == "Todo") {
+                mentorList.toMutableList()
+            } else {
+                mentorList.filter { mentor ->
+                    mentor.mentor_subjects.contains(selectedSubject)
+                }.toMutableList()
+            }
+
+            binding.viewMentores.layoutManager = GridLayoutManager(this@MainActivity, 2)
+            binding.viewMentores.adapter = MentorAdapter(filteredMentors, selectedSubject)
+
             binding.progressBarMentores.visibility = View.GONE
         })
 
         viewModel.loadMentores()
     }
+
+
 }
