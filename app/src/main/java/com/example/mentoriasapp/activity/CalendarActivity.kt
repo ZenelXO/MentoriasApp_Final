@@ -3,7 +3,9 @@ package com.example.mentoriasapp.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.applandeo.materialcalendarview.CalendarDay
@@ -14,12 +16,15 @@ import com.example.mentoriasapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class CalendarActivity : AppCompatActivity() {
     private lateinit var calendarView: CalendarView
     private var books: MutableMap<String, String> = mutableMapOf()
+    var mentorName: String = ""
+    var currentBooking: String = ""
     public var bookDay = ""
     public var bookMonth = ""
     public var bookYear = ""
@@ -53,6 +58,34 @@ class CalendarActivity : AppCompatActivity() {
         profile_button.setOnClickListener{
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
+        }
+
+        //Para hacer que se vea las reservas de hoy en el text view
+        val todayMentories: TextView = findViewById(R.id.todayMentories)
+        val calendarInstance = Calendar.getInstance()
+        val todayFormat = SimpleDateFormat("dd/MM/YYYY", Locale.getDefault())
+        val todayDate = todayFormat.format(calendarInstance.time)
+        searchCurrentUserBookings { listOfBookings ->
+            for (mentorie in listOfBookings.children){
+                if (mentorie.value.toString() == todayDate.toString()) {
+                    mentorName = mentorie.key.toString()
+                    currentBooking = mentorie.value.toString()
+                    todayMentories.text = "Hoy tienes una mentoría con " + "${mentorie.key}" + "."
+                }
+            }
+        }
+
+        //Boton para cancelar mentoria
+        val cancelBooking: Button = findViewById(R.id.cancelBooking)
+        cancelBooking.setOnClickListener{
+            if(todayDate == currentBooking){
+                deleteUserBooking(mentorName) { result ->
+                    Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
+                    recreate()
+                }
+            }else{
+                Toast.makeText(this, "No se puede cancelar una reserva que no sea la de hoy.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // VARIABLE PARA LAS RESERVAS
@@ -134,6 +167,52 @@ class CalendarActivity : AppCompatActivity() {
             }
         }.addOnFailureListener { exception ->
             Log.e("FirebaseError", "Error al obtener los alumnos", exception)
+        }
+    }
+
+    private fun deleteUserBooking(bookingMentor: String, callback: (String) -> Unit) {
+        searchUserKey { currentUserId ->
+            if (currentUserId.isNotEmpty()) {
+                val dataBaseReference = FirebaseDatabase.getInstance("https://mentoriasapp-default-rtdb.europe-west1.firebasedatabase.app/")
+                val userList = dataBaseReference.getReference("alumnos")
+
+                // Referencia a las reservas del usuario
+                val userBookingsRef = userList.child(currentUserId).child("bookings").child(bookingMentor)
+                Log.i("borrar", "$userBookingsRef")
+                // Intentar borrar la reserva con la fecha proporcionada
+                userBookingsRef.removeValue().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        callback("Reserva eliminada correctamente")
+                    } else {
+                        callback("Error al eliminar la reserva")
+                    }
+                }
+            } else {
+                callback("Error: No se encontró el usuario")
+            }
+        }
+    }
+
+    private fun searchUserKey(callback: (String) -> Unit) {
+        val emailOfUser = FirebaseAuth.getInstance().currentUser?.email.toString()
+        val dataBaseReference = FirebaseDatabase.getInstance("https://mentoriasapp-default-rtdb.europe-west1.firebasedatabase.app/")
+        val userList = dataBaseReference.getReference("alumnos")
+
+        userList.get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                for (userSnapshot in dataSnapshot.children) {
+                    val email = userSnapshot.child("email").value.toString()
+                    if (email == emailOfUser) {
+                        val targetUser = userSnapshot.key.toString()
+                        callback(targetUser)
+                        return@addOnSuccessListener
+                    }
+                }
+            }
+            callback("")
+        }.addOnFailureListener { exception ->
+            Log.e("FirebaseError", "Error al obtener los alumnos", exception)
+            callback("")
         }
     }
 }
