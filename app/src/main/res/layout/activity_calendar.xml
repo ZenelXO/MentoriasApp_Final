@@ -47,11 +47,31 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerBookingsView"
+            <TextView
+                android:id="@+id/todayMentories"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_margin="16dp"
+                android:textSize="16sp"
+                android:text="No tienes ninguna mentoría para hoy" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="118dp">
+
+                <Button
+                    android:id="@+id/cancelBooking"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/blue_bg"
+                    android:text="Cancelar mentoría"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
